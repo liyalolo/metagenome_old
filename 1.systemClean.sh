@@ -1,3 +1,12 @@
+if [ $# -lt 3 ];
+then echo "sh $0 projectDir sampleID rawFqDir
+
+Notice: assume rawFqDir contains
+rawFqDir/sid.R1.fastq.gz
+
+"
+exit 0;
+fi
 
 dir=$1                  #project dir
 sid=$2                  #sample id
@@ -12,15 +21,14 @@ if [ ! -d "$dir/01.DataClean/$sid" ]; then
 fi
 
 #edit here
-raw_fq1="$rawfqdir/$sid/$sid.R1.fastq.gz"
-raw_fq2="$rawfqdir/$sid/$sid.R2.fastq.gz"
-fq1="$dir/01.DataClean/raw/$sid.1.fq"
-fq2="$dir/01.DataClean/raw/$sid.2.fq"
+raw_fq1="$rawfqdir/$sid.R1.fastq.gz"
+raw_fq2="$rawfqdir/$sid.R2.fastq.gz"
+fq1="$dir/01.DataClean/$sid/$sid.raw.1.fq.gz"
+fq2="$dir/01.DataClean/$sid/$sid.raw.2.fq.gz"
 
 
 ln -s $raw_fq1 $fq1
 ln -s $raw_fq2 $fq2
-
 
 sfolder="$dir/01.DataClean/$sid"
 clean_fq1="$sfolder/$sid.clean.1.fq"
@@ -38,7 +46,5 @@ echo "$fq1,$fq2" >$sfolder/data.list
 
 
 perl /System/Pipline/DNA/DNA_Micro/MetaGenome_pipeline/MetaGenome_pipeline_V2.2/lib/01.QC_Assembly/01.QC/lib/distribute_fqcheck.pl  $fq1check $fq2check  -o $sfolder
-
-
 
 
